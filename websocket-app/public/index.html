@@ -15,4 +15,49 @@
         <button type="submit" id="sendButton">Send</button>
     </form>
 
+<script>
+
+const socket = new WebSocket('ws://localhost:8080');
+
+socket.onopen = function() {
+    console.log('Connected to WebSocket server');
+    
+    // Send an identification message on connection
+    const handshakeMessage = JSON.stringify({ username: "HTMLClient", clientType: "HTML" });  
+    socket.send(handshakeMessage);
+};
+
+socket.onmessage = function(event) {
+    const messagesDiv = document.getElementById('messages');
+    const data = JSON.parse(event.data);
+    
+    // Format timestamp to a readable time format
+    const date = new Date(data.timestamp);
+    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    const messageElement = document.createElement('p');
+    messageElement.innerHTML = `<strong>${data.username}</strong>: ${data.message} <br> 
+    <span style="font-size: 10px; color: gray">${formattedTime}</span>`;
+    messagesDiv.appendChild(messageElement);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to bottom
+};
+    
+socket.onerror = function(error) {
+    console.error('WebSocket Error: ', error);
+};
+    
+socket.onclose = function() {
+    console.log('Disconnected from WebSocket server');
+
+};
+
+function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value;
+    if (message.trim() === '') return;
+    socket.send(JSON.stringify({ message }));
+    messageInput.value = '';
+}
+
+</script>       
+</body>
 </html>
