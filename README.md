@@ -61,11 +61,7 @@ http://localhost:8080
 (or run the SwiftUI client in Xcode using ContentView.swift)
 
 ## Notes
-- This app assumes a local MongoDB instance is avaiable
+- This app assumes a local MongoDB instance is available
 - The WebSocket protocol uses a simple initial handshake (username, clientType) for basic identification.
 
 ---
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
